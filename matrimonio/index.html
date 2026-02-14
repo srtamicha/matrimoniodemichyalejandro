@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Para Alejandro 💖</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(-45deg,#ffe4ec,#fff0f5,#ffd6e0);
+    background-size:400% 400%;
+    animation:bg 15s ease infinite;
+    font-family:'Arial',sans-serif;
+    overflow:hidden;
+}
+@keyframes bg{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+.container{
+    background:white;
+    padding:40px;
+    border-radius:25px;
+    text-align:center;
+    width:90%;
+    max-width:420px;
+    box-shadow:0 20px 40px rgba(0,0,0,.2);
+    z-index:2;
+}
+
+h1{
+    color:#ff4d6d;
+    min-height:90px;
+}
+
+button{
+    padding:12px 28px;
+    font-size:18px;
+    border:none;
+    border-radius:20px;
+    cursor:pointer;
+    margin:10px;
+}
+
+#yes{
+    background:#ff4d6d;
+    color:white;
+}
+#no{
+    background:#ddd;
+}
+
+@keyframes shake{
+    0%{transform:translateX(0)}
+    25%{transform:translateX(-5px)}
+    50%{transform:translateX(5px)}
+    75%{transform:translateX(-5px)}
+    100%{transform:translateX(0)}
+}
+.shake{animation:shake .4s}
+
+.petal{
+    position:fixed;
+    top:-10%;
+    font-size:22px;
+    animation:fall linear forwards;
+    pointer-events:none;
+}
+@keyframes fall{
+    to{
+        transform:translateY(110vh) rotate(360deg);
+    }
+}
+
+#acta{
+    display:none;
+    width:100%;
+    margin-top:20px;
+    border-radius:15px;
+}
+
+#final{
+    display:none;
+    margin-top:15px;
+    color:#ff4d6d;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1 id="text"></h1>
+
+    <button id="yes">Sí 💖</button>
+    <button id="no">No 💔</button>
+
+    <h2 id="countdown"></h2>
+
+    <img src="uno.jpeg" id="acta">
+
+    <p id="final">
+        Gracias por amarme tanto como yo a ti, te amo.
+    </p>
+</div>
+
+<audio id="jeje" src="jeje.mp3"></audio>
+<audio id="error" src="error.mp3"></audio>
+<audio id="triste" src="triste.mp3"></audio>
+<audio id="boda" src="boda.mp3" loop></audio>
+
+<script>
+const text=document.getElementById("text");
+const yes=document.getElementById("yes");
+const no=document.getElementById("no");
+const countdown=document.getElementById("countdown");
+const acta=document.getElementById("acta");
+const final=document.getElementById("final");
+
+const jeje=document.getElementById("jeje");
+const error=document.getElementById("error");
+const triste=document.getElementById("triste");
+const boda=document.getElementById("boda");
+
+let stage=1;
+
+function escribir(msg,cb){
+    text.innerHTML="";
+    let i=0;
+    function t(){
+        if(i<msg.length){
+            text.innerHTML+=msg.charAt(i);
+            i++;
+            setTimeout(t,60);
+        }else if(cb){cb();}
+    }
+    t();
+}
+
+function petalos(){
+    setInterval(()=>{
+        const p=document.createElement("div");
+        p.className="petal";
+        p.innerHTML="🌸";
+        p.style.left=Math.random()*100+"vw";
+        p.style.animationDuration=(Math.random()*5+5)+"s";
+        document.body.appendChild(p);
+        setTimeout(()=>p.remove(),10000);
+    },400);
+}
+
+// INICIO (SIN AUDIO AUTOMÁTICO)
+escribir("¿Quieres ser mi San Valentín?",()=>{
+    setTimeout(()=>escribir("Alejandro..."),800);
+});
+
+// BOTÓN NO
+no.onclick=()=>{
+    no.classList.add("shake");
+    if(stage===1){
+        error.play();
+        no.innerText="De mi no te salvas Alejandro 😈";
+        no.disabled=true;
+    }else{
+        triste.play();
+        escribir("Rompiste mi corazoncito, pero elige de nuevo anda te doy una segunda oportunidad ❤️‍🩹...");
+        no.disabled=true;
+    }
+};
+
+// BOTÓN SÍ (AQUÍ YA SE ACTIVA EL AUDIO)
+yes.onclick=()=>{
+    jeje.play();
+    if(stage===1){
+        stage=2;
+        escribir("¿Y estar conmigo por el resto de tu vida?");
+    }else{
+        boda.play();
+        escribir("YEEEYYY 🥹💍");
+        setTimeout(()=>{
+            escribir("Ya estás amarrado a mi, MUEJEJE 😈💖");
+            cuenta();
+        },1200);
+    }
+};
+
+function cuenta(){
+    let n=3;
+    countdown.innerText=n;
+    const i=setInterval(()=>{
+        n--;
+        if(n>0){
+            countdown.innerText=n;
+        }else{
+            clearInterval(i);
+            countdown.innerText="";
+            acta.style.display="block";
+            final.style.display="block";
+            petalos();
+        }
+    },1000);
+}
+</script>
+
+</body>
+</html>
